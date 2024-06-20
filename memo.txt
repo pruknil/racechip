@@ -1,0 +1,2 @@
+docker rmi pruknil/racechip:1.0.0
+docker build -t pruknil/racechip:1.0.0 -f Dockerfile .
