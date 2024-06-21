@@ -31,9 +31,11 @@ type EncryptDataRequest struct {
 	EncryptDataBodyRequest `json:"Body"`
 }
 
-type EncryptDataResponse struct {
-	ResponseHeader          `json:"Header"`
-	EncryptDataBodyResponse `json:"Body"`
+type EncryptDataResponse []struct {
+	UserID int    `json:"userId"`
+	ID     int    `json:"id"`
+	Title  string `json:"title"`
+	Body   string `json:"body"`
 }
 
 type EncryptDataBodyRequest struct {

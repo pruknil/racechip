@@ -5,9 +5,12 @@ import (
 	http2 "sportbit.com/racechip/backends/http"
 )
 
-func (s *HttpBackendService) TESTJA(req http2.SFTP0002I01Request) (*http2.SFTP0002I01Response, error) {
-	var model http2.SFTP0002I01Response
-	var builder, err = s.newPostRequestBuilder(s.CCMSAPI.LocalUrl, req)
+func (s *HttpBackendService) TESTJA(req http2.EncryptDataRequest) (*http2.EncryptDataResponse, error) {
+	var model http2.EncryptDataResponse
+	//var builder, err = s.newPostRequestBuilder(s.CCMSAPI.LocalUrl, req)
+
+	var builder, err = s.newGetRequestBuilder("https://jsonplaceholder.typicode.com/posts", nil, req)
+
 	if err != nil {
 		return nil, err
 	}

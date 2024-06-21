@@ -27,9 +27,11 @@ type ExampleRequest struct {
 	Data    string `json:"data"`
 }
 
-type ExampleResponse struct {
-	DPKName string `json:"dPKName"`
-	EData   string `json:"eData"`
+type ExampleResponse []struct {
+	UserID int    `json:"userId"`
+	ID     int    `json:"id"`
+	Title  string `json:"title"`
+	Body   string `json:"body"`
 }
 
 func (s *ExampleService) Parse() error {
@@ -47,11 +49,12 @@ func (s *ExampleService) Parse() error {
 }
 
 func (s *ExampleService) InputMapping() error {
-	s.beRequest.RequestHeader.UserId = s.Request.Header.UserId
-	s.beRequest.RequestHeader.RqDt = s.Request.Header.RqDt
-	s.beRequest.RequestHeader.FuncNm = "TESTJA"
-	s.beRequest.RequestHeader.RqAppId = "0000"
-	s.beRequest.RequestHeader.RqUID = uuid.New().String()
+	var hd = s.beRequest.RequestHeader
+	hd.UserId = s.Request.Header.UserId
+	hd.RqDt = s.Request.Header.RqDt
+	hd.FuncNm = "TESTJA"
+	hd.RqAppId = "0000"
+	hd.RqUID = uuid.New().String()
 	err := deepcopy.Copy(&s.beRequest.EncryptDataBodyRequest, s.serviceRequest)
 	if err != nil {
 		return err
@@ -60,7 +63,7 @@ func (s *ExampleService) InputMapping() error {
 }
 
 func (s *ExampleService) OutputMapping() error {
-	err := deepcopy.Copy(&s.serviceResponse, s.beResponse.EncryptDataBodyResponse)
+	err := deepcopy.Copy(&s.serviceResponse, s.beResponse)
 	if err != nil {
 		return err
 	}
@@ -68,27 +71,14 @@ func (s *ExampleService) OutputMapping() error {
 }
 
 func (s *ExampleService) getResponse() ResMsg {
+	s.baseService.getResponse()
 	s.Response.Body = s.serviceResponse
 	return s.Response
 }
 
 func (s *ExampleService) Business() error {
 	var err error
-	//s.beResponse, err = s.IHttpBackend.TESTJA(s.beRequest)
-
-	s.beResponse = &http.EncryptDataResponse{
-		ResponseHeader: http.ResponseHeader{
-			FuncNm:     "1",
-			RqUID:      "2",
-			RsDt:       "3",
-			RsAppId:    "4",
-			StatusCode: "5",
-		},
-		EncryptDataBodyResponse: http.EncryptDataBodyResponse{
-			DPKName: "abc",
-			EData:   "def",
-		},
-	}
+	s.beResponse, err = s.IHttpBackend.TESTJA(s.beRequest)
 	if err != nil {
 		return err
 	}
