@@ -6,6 +6,6 @@ import "sportbit.com/racechip/backends/http"
 
 type IHttpBackend interface {
 	//DecryptData(http.DecryptDataRequest) (*http.DecryptDataResponse, error)
-	//EncryptData(http.EncryptDataRequest) (*http.EncryptDataResponse, error)
-	TESTJA(http.EncryptDataRequest) (*http.EncryptDataResponse, error)
+	//ExampleBackend(http.ExampleBackendRequest) (*http.ExampleBackendResponse, error)
+	TESTJA(http.ExampleBackendRequest) (*http.ExampleBackendResponse, error)
 }

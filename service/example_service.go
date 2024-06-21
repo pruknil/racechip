@@ -15,8 +15,8 @@ type ExampleService struct {
 	service.IHttpBackend
 	logger.AppLog
 
-	beRequest  http.EncryptDataRequest
-	beResponse *http.EncryptDataResponse
+	beRequest  http.ExampleBackendRequest
+	beResponse *http.ExampleBackendResponse
 
 	serviceRequest  ExampleRequest
 	serviceResponse ExampleResponse
@@ -55,7 +55,7 @@ func (s *ExampleService) InputMapping() error {
 	hd.FuncNm = "TESTJA"
 	hd.RqAppId = "0000"
 	hd.RqUID = uuid.New().String()
-	err := deepcopy.Copy(&s.beRequest.EncryptDataBodyRequest, s.serviceRequest)
+	err := deepcopy.Copy(&s.beRequest.ExampleBackendBodyRequest, s.serviceRequest)
 	if err != nil {
 		return err
 	}

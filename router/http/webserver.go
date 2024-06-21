@@ -19,7 +19,7 @@ type Config struct {
 	IdleTimeout  time.Duration
 }
 
-type Gin struct {
+type WebServer struct {
 	srv *http.Server
 	//srvSSL      *http.Server
 	config      Config
@@ -29,15 +29,15 @@ type Gin struct {
 	container   *dig.Container
 }
 
-func NewGin(cfg Config, service service.IHttpService, logg logger.AppLog) *Gin {
-	return &Gin{
+func NewGin(cfg Config, service service.IHttpService, logg logger.AppLog) *WebServer {
+	return &WebServer{
 		config:      cfg,
 		httpService: service,
 		log:         logg,
 	}
 }
 
-func (g *Gin) initializeRoutes() {
+func (g *WebServer) initializeRoutes() {
 	hn, _ := os.Hostname()
 	//g.router.Use(static.Serve("/", static.LocalFile("views/static", true)))
 	g.router.POST("/api", g.serviceLocator)
@@ -47,7 +47,7 @@ func (g *Gin) initializeRoutes() {
 	})
 }
 
-func (g *Gin) serviceLocator(c *gin.Context) {
+func (g *WebServer) serviceLocator(c *gin.Context) {
 	var reqMsg service.ReqMsg
 	err := c.BindJSON(&reqMsg)
 	if err != nil {
@@ -59,7 +59,7 @@ func (g *Gin) serviceLocator(c *gin.Context) {
 
 }
 
-func (g *Gin) Start() {
+func (g *WebServer) Start() {
 	//g.container = container
 	g.router = gin.Default()
 
@@ -83,7 +83,7 @@ func (g *Gin) Start() {
 	}()
 }
 
-func (g *Gin) Shutdown() {
+func (g *WebServer) Shutdown() {
 	log.Println("Shutdown Server ...")
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()

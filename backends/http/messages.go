@@ -16,62 +16,24 @@ type ResponseHeader struct {
 	StatusCode string `json:"statusCode"`
 }
 
-type DecryptDataRequest struct {
-	RequestHeader          `json:"Header"`
-	DecryptDataBodyRequest `json:"Body"`
+type ExampleBackendRequest struct {
+	RequestHeader             `json:"Header"`
+	ExampleBackendBodyRequest `json:"Body"`
 }
 
-type DecryptDataResponse struct {
-	ResponseHeader          `json:"Header"`
-	DecryptDataBodyResponse `json:"Body"`
-}
-
-type EncryptDataRequest struct {
-	RequestHeader          `json:"Header"`
-	EncryptDataBodyRequest `json:"Body"`
-}
-
-type EncryptDataResponse []struct {
+type ExampleBackendResponse []struct {
 	UserID int    `json:"userId"`
 	ID     int    `json:"id"`
 	Title  string `json:"title"`
 	Body   string `json:"body"`
 }
 
-type EncryptDataBodyRequest struct {
+type ExampleBackendBodyRequest struct {
 	DPKName string `json:"dPKName"`
 	Data    string `json:"data"`
 }
 
-type EncryptDataBodyResponse struct {
+type ExampleBackendBodyResponse struct {
 	DPKName string `json:"dPKName"`
 	EData   string `json:"eData"`
-}
-
-type DecryptDataBodyRequest struct {
-	DPKName string `json:"dPKName"`
-	EData   string `json:"eData"`
-}
-
-type DecryptDataBodyResponse struct {
-	DPKName string `json:"dPKName"`
-	Data    string `json:"data"`
-}
-
-type SFTP0002I01Request struct {
-	RequestHeader          `json:"Header"`
-	SFTP0002I01BodyRequest `json:"Body"`
-}
-
-type SFTP0002I01Response struct {
-	ResponseHeader          `json:"Header"`
-	SFTP0002I01BodyResponse `json:"Body"`
-}
-
-type SFTP0002I01BodyRequest struct {
-	Input  string `json:"input"`
-	Output string `json:"output"`
-}
-
-type SFTP0002I01BodyResponse struct {
 }

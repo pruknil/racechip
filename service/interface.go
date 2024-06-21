@@ -22,5 +22,5 @@ type IServiceTemplate interface {
 	setLog(appLog logger.AppLog)
 	setContext(context.Context)
 	getContext() context.Context
-	ConvertStringEncoding(fromEncoding string, toEncoding string, input string) (string, error)
+	//ConvertStringEncoding(fromEncoding string, toEncoding string, input string) (string, error)
 }

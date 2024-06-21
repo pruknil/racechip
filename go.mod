@@ -8,7 +8,6 @@ require (
 	github.com/gin-gonic/gin v1.10.0
 	github.com/google/uuid v1.6.0
 	github.com/natefinch/lumberjack v2.0.0+incompatible
-	github.com/satori/go.uuid v1.2.0
 	github.com/sirupsen/logrus v1.9.3
 	github.com/sony/gobreaker v1.0.0
 	go.uber.org/dig v1.17.1

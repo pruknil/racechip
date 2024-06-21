@@ -16,16 +16,16 @@ type ReqHeader struct {
 }
 
 type ResHeader struct {
-	FuncNm     string     `json:"funcNm,omitempty"`
-	RqUID      string     `json:"rqUID,omitempty"`
-	RsAppID    string     `json:"rsAppId,omitempty"`
-	RsUID      string     `json:"rsUID,omitempty"`
-	RsDt       time.Time  `json:"rsDt,omitempty"`
-	StatusCode string     `json:"statusCode,omitempty"`
-	ErrorVect  *ErrorVect `json:"errorVect,omitempty"`
+	FuncNm     string    `json:"funcNm,omitempty"`
+	RqUID      string    `json:"rqUID,omitempty"`
+	RsAppID    string    `json:"rsAppId,omitempty"`
+	RsUID      string    `json:"rsUID,omitempty"`
+	RsDt       time.Time `json:"rsDt,omitempty"`
+	StatusCode string    `json:"statusCode,omitempty"`
+	Errors     *Errors   `json:"errors,omitempty"`
 }
 
-type ErrorVect struct {
+type Errors struct {
 	Error []Error `json:"error"`
 }
 

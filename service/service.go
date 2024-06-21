@@ -32,7 +32,7 @@ func (s *baseService) buildResponseHeader() ResHeader {
 		RsUID:      s.Request.Header.RsUID,
 		RsDt:       time.Now(),
 		StatusCode: "00",
-		ErrorVect:  nil,
+		Errors:     nil,
 	}
 }
 
@@ -154,7 +154,7 @@ func (s *baseService) buildErrResp(businessError error) ResMsg {
 			RsDt:       time.Now(),
 			RsAppID:    ApplicationId,
 			StatusCode: "10",
-			ErrorVect:  &ErrorVect{Error: []Error{buildError(businessError)}},
+			Errors:     &Errors{Error: []Error{buildError(businessError)}},
 		},
 		Body: s.Response.Body,
 	}
@@ -216,7 +216,7 @@ func (s HttpService) DoService(req ReqMsg, l logger.AppLog) ResMsg {
 			Header: ResHeader{
 				RsDt:       time.Now(),
 				StatusCode: "10",
-				ErrorVect: &ErrorVect{[]Error{{
+				Errors: &Errors{[]Error{{
 					ErrorAppID:    ApplicationId,
 					ErrorAppAbbrv: ApplicationABBR,
 					ErrorDesc:     "Service Not found",
