@@ -1,0 +1,10 @@
+log:
+  level: debug
+gin:
+  mode: debug
+server:
+  port: 8080
+  timeout:
+    read: 10s
+    write: 10s
+    idle: 10s

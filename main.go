@@ -1,6 +1,9 @@
 package main
 
 import (
+	"fmt"
+	"github.com/spf13/viper"
+	//"github.com/spf13/viper"
 	"go.uber.org/dig"
 	"log"
 	"os"
@@ -108,8 +111,16 @@ func NewHttpService(httpService httpsvc.IHttpBackend, cfg app.Config, log logger
 	}
 }
 func NewConfig() app.Config {
-
-	ten, _ := time.ParseDuration("10s")
+	viper.SetConfigName("config")
+	viper.SetConfigType("yaml")
+	viper.AddConfigPath(".")
+	err := viper.ReadInConfig()
+	if err != nil {
+		panic(fmt.Errorf("fatal error config file: %w", err))
+	}
+	read, _ := time.ParseDuration(viper.GetString("server.timeout.read"))
+	write, _ := time.ParseDuration(viper.GetString("server.timeout.write"))
+	idle, _ := time.ParseDuration(viper.GetString("server.timeout.idle"))
 	return app.Config{
 		Backend: app.Backend{
 			Http: httpbackend.Config{
@@ -123,10 +134,10 @@ func NewConfig() app.Config {
 		},
 		Router: app.Router{
 			Http: http.Config{
-				Port:         os.Getenv("SERVER_PORT"),
-				ReadTimeout:  ten,
-				WriteTimeout: ten,
-				IdleTimeout:  ten,
+				Port:         viper.GetString("server.port"),
+				ReadTimeout:  read,
+				WriteTimeout: write,
+				IdleTimeout:  idle,
 			},
 		},
 		Service: app.Service{
