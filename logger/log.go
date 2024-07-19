@@ -90,5 +90,6 @@ type AppLog struct {
 	Error  Logger
 	Socket Logger
 	Rest   Logger
+	Redis  Logger
 	Router Logger
 }

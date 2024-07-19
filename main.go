@@ -11,6 +11,7 @@ import (
 	"sportbit.com/racechip/app"
 	httpbackend "sportbit.com/racechip/backends/http"
 	httpsvc "sportbit.com/racechip/backends/http/service"
+	redissvc "sportbit.com/racechip/backends/redis"
 	"sportbit.com/racechip/logger"
 	"sportbit.com/racechip/router"
 	"sportbit.com/racechip/router/http"
@@ -55,6 +56,7 @@ func buildContainer() *dig.Container {
 	errorWrap(container.Provide(NewHttpService))
 	errorWrap(container.Provide(NewHttp))
 	errorWrap(container.Provide(NewHttpBackend))
+	errorWrap(container.Provide(NewRedisBackend))
 
 	//errorWrap(container.Provide(NewDataBase))
 	//errorWrap(container.Provide(NewDataService))
@@ -71,6 +73,7 @@ func NewLogger() logger.AppLog {
 	al.Rest = al.NewLog("rest", os.Getenv("LOG_LEVEL"))
 	al.Router = al.NewLog("router", os.Getenv("LOG_LEVEL"))
 	al.Socket = al.NewLog("socket", os.Getenv("LOG_LEVEL"))
+	al.Redis = al.NewLog("redis", os.Getenv("LOG_LEVEL"))
 	return al
 }
 
@@ -82,6 +85,10 @@ func NewHttp(cfg app.Config, log logger.AppLog) httpbackend.IHttpBackendService 
 
 func NewHttpBackend(cfg app.Config, s httpbackend.IHttpBackendService) httpsvc.IHttpBackend {
 	return httpsvc.New(cfg.Backend.Http, s)
+}
+
+func NewRedisBackend(cfg app.Config, log logger.AppLog) redissvc.IRedisBackendService {
+	return redissvc.New(cfg.Backend.Redis, log)
 }
 
 //================= End BACKEND Section =================
