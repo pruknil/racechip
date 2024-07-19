@@ -8,6 +8,7 @@ WORKDIR /tmp/racechip
 # We want to populate the module cache based on the go.{mod,sum} files.
 COPY go.mod .
 COPY go.sum .
+COPY config.yaml .
 
 RUN go mod download
 
@@ -24,9 +25,11 @@ FROM alpine:3.14
 #RUN apk add ca-certificates
 
 COPY --from=build_base /tmp/racechip/out/racechip /app/racechip
-
+COPY --from=build_base /tmp/racechip/config.yaml /app/config.yaml
 # This container exposes port 8080 to the outside world
 EXPOSE 8080
 
 # Run the binary program produced by `go install`
-CMD ["/app/racechip"]
+#CMD ["/app/racechip"]
+WORKDIR /app
+ENTRYPOINT ["/app/racechip"]
