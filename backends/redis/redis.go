@@ -1,6 +1,7 @@
 package http
 
 import (
+	"context"
 	"github.com/redis/go-redis/v9"
 	breaker "github.com/sony/gobreaker"
 	"sportbit.com/racechip/logger"
@@ -14,7 +15,10 @@ type Client struct {
 	RedisRequestBuilder
 }
 
+var ctx = context.Background()
+
 func New(c Config, log logger.AppLog) IRedisBackendService {
+
 	var st breaker.Settings
 	st.Name = "Redis"
 	st.Timeout = 3 * time.Second
@@ -23,27 +27,39 @@ func New(c Config, log logger.AppLog) IRedisBackendService {
 		return counts.Requests >= 3 && failureRatio >= 0.6
 	}
 	cb := breaker.NewCircuitBreaker(st)
-	return &Client{CircuitBreaker: cb, Config: c, AppLog: log}
+
+	rdb := redis.NewClient(&redis.Options{
+		Addr:     "localhost:6379",
+		Password: "", // no password set
+		DB:       0,  // use default DB
+	})
+	rrb := RedisRequestBuilder{
+		Req:           "",
+		client:        rdb,
+		responseModel: nil,
+	}
+
+	return &Client{CircuitBreaker: cb, Config: c, AppLog: log, RedisRequestBuilder: rrb}
 }
 
 type RedisConfig struct {
 	Addr     string
 	Password string
-	DB       string
+	DB       int
 }
 
 type Config struct {
 	RedisCfg RedisConfig
 }
 
-func (s *Client) Set(input RedisRequestBuilder) error {
+func (s *Client) Set(key string, value interface{}, expiration time.Duration) error {
 	defer func(t time.Time) {
-		s.AppLog.Trace.Printf("%s", input.Req)
+		s.AppLog.Trace.Printf("%s", value)
 		s.AppLog.Trace.Printf("Redis.DoRequest elapsed time %.4f ms", float64(time.Since(t).Nanoseconds())/float64(time.Millisecond))
 
 	}(time.Now())
 	_, err := s.CircuitBreaker.Execute(func() (i interface{}, e error) {
-
+		return nil, s.RedisRequestBuilder.client.Set(ctx, key, value, expiration).Err()
 		//rawBody, err := input.Req.GetBody()
 		//if err != nil {
 		//	return nil, err

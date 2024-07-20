@@ -1,5 +1,7 @@
 package http
 
+import "time"
+
 type IRedisBackendService interface {
-	Set(RedisRequestBuilder) error
+	Set(key string, value interface{}, expiration time.Duration) error
 }

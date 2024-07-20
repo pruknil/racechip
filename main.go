@@ -55,8 +55,8 @@ func buildContainer() *dig.Container {
 
 	errorWrap(container.Provide(NewHttpService))
 	errorWrap(container.Provide(NewHttp))
-	errorWrap(container.Provide(NewHttpBackend))
 	errorWrap(container.Provide(NewRedisBackend))
+	errorWrap(container.Provide(NewHttpBackend))
 
 	//errorWrap(container.Provide(NewDataBase))
 	//errorWrap(container.Provide(NewDataService))
@@ -83,12 +83,12 @@ func NewHttp(cfg app.Config, log logger.AppLog) httpbackend.IHttpBackendService 
 	return httpbackend.New(cfg.Backend.Http, log)
 }
 
-func NewHttpBackend(cfg app.Config, s httpbackend.IHttpBackendService) httpsvc.IHttpBackend {
-	return httpsvc.New(cfg.Backend.Http, s)
-}
-
 func NewRedisBackend(cfg app.Config, log logger.AppLog) redissvc.IRedisBackendService {
 	return redissvc.New(cfg.Backend.Redis, log)
+}
+
+func NewHttpBackend(cfg app.Config, s httpbackend.IHttpBackendService, r redissvc.IRedisBackendService) httpsvc.IHttpBackend {
+	return httpsvc.New(cfg.Backend.Http, s, r)
 }
 
 //================= End BACKEND Section =================
@@ -138,6 +138,12 @@ func NewConfig() app.Config {
 				//	LocalUrl:       os.Getenv("CCMS_SFTP_URL"),
 				//},
 			},
+			Redis: redissvc.Config{
+				RedisCfg: redissvc.RedisConfig{
+					Addr:     "localhost:6379",
+					Password: "",
+					DB:       0,
+				}},
 		},
 		Router: app.Router{
 			Http: http.Config{
