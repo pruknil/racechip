@@ -5,20 +5,17 @@ import (
 	"encoding/json"
 	"net/http"
 	http2 "sportbit.com/racechip/backends/http"
-	redissvc "sportbit.com/racechip/backends/redis"
 )
 
 type HttpBackendService struct {
-	redissvc.IRedisBackendService
 	http2.IHttpBackendService
 	http2.Config
 }
 
-func New(c http2.Config, service http2.IHttpBackendService, r redissvc.IRedisBackendService) IHttpBackend {
+func New(c http2.Config, service http2.IHttpBackendService) IHttpBackend {
 	return &HttpBackendService{
-		IRedisBackendService: r,
-		IHttpBackendService:  service,
-		Config:               c,
+		IHttpBackendService: service,
+		Config:              c,
 	}
 }
 

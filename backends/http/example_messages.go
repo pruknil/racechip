@@ -37,3 +37,25 @@ type ExampleBackendBodyResponse struct {
 	DPKName string `json:"dPKName"`
 	EData   string `json:"eData"`
 }
+
+type ExampleRedisBackendRequest struct {
+	RequestHeader                  `json:"Header"`
+	ExampleRedisBackendBodyRequest `json:"Body"`
+}
+
+type ExampleRedisBackendResponse []struct {
+	UserID int    `json:"userId"`
+	ID     int    `json:"id"`
+	Title  string `json:"title"`
+	Body   string `json:"body"`
+}
+
+type ExampleRedisBackendBodyRequest struct {
+	DPKName string `json:"dPKName"`
+	Data    string `json:"data"`
+}
+
+type ExampleRedisBackendBodyResponse struct {
+	DPKName string `json:"dPKName"`
+	EData   string `json:"eData"`
+}

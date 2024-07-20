@@ -2,17 +2,17 @@ package service
 
 import (
 	"encoding/json"
+	"sportbit.com/racechip/backends/http"
 
 	"github.com/getlantern/deepcopy"
 	"github.com/google/uuid"
-	"sportbit.com/racechip/backends/http"
-	"sportbit.com/racechip/backends/http/service"
+	"sportbit.com/racechip/backends/redis/service"
 	"sportbit.com/racechip/logger"
 )
 
-type ExampleService struct {
+type ExampleRedisBackendService struct {
 	baseService
-	service.IHttpBackend
+	service.IRedisBackendService
 	logger.AppLog
 
 	beRequest  http.ExampleBackendRequest
@@ -22,19 +22,7 @@ type ExampleService struct {
 	serviceResponse ExampleResponse
 }
 
-type ExampleRequest struct {
-	DPKName string `json:"dPKName"`
-	Data    string `json:"data"`
-}
-
-type ExampleResponse []struct {
-	UserID int    `json:"userId"`
-	ID     int    `json:"id"`
-	Title  string `json:"title"`
-	Body   string `json:"body"`
-}
-
-func (s *ExampleService) Parse() error {
+func (s *ExampleRedisBackendService) Parse() error {
 	jsonString, err := json.Marshal(s.Request.Body)
 	if err != nil {
 		return err
@@ -48,11 +36,11 @@ func (s *ExampleService) Parse() error {
 	return nil
 }
 
-func (s *ExampleService) InputMapping() error {
+func (s *ExampleRedisBackendService) InputMapping() error {
 	var hd = s.beRequest.RequestHeader
 	hd.UserId = s.Request.Header.UserId
 	hd.RqDt = s.Request.Header.RqDt
-	hd.FuncNm = "TESTJA"
+	hd.FuncNm = "TestRedis"
 	hd.RqAppId = "0000"
 	hd.RqUID = uuid.New().String()
 	err := deepcopy.Copy(&s.beRequest.ExampleBackendBodyRequest, s.serviceRequest)
@@ -62,7 +50,7 @@ func (s *ExampleService) InputMapping() error {
 	return nil
 }
 
-func (s *ExampleService) OutputMapping() error {
+func (s *ExampleRedisBackendService) OutputMapping() error {
 	err := deepcopy.Copy(&s.serviceResponse, s.beResponse)
 	if err != nil {
 		return err
@@ -70,15 +58,15 @@ func (s *ExampleService) OutputMapping() error {
 	return nil
 }
 
-func (s *ExampleService) getResponse() ResMsg {
+func (s *ExampleRedisBackendService) getResponse() ResMsg {
 	s.baseService.getResponse()
 	s.Response.Body = s.serviceResponse
 	return s.Response
 }
 
-func (s *ExampleService) Business() error {
+func (s *ExampleRedisBackendService) Business() error {
 	var err error
-	s.beResponse, err = s.IHttpBackend.TESTJA(s.beRequest)
+	err = s.IRedisBackendService.Set("key", "value", 0)
 	if err != nil {
 		return err
 	}

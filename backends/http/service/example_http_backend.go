@@ -28,6 +28,5 @@ func (s *HttpBackendService) TESTJA(req http2.ExampleBackendRequest) (*http2.Exa
 		return &model, err
 	}
 
-	s.Set("bbb", "&model", 0)
 	return &model, nil
 }

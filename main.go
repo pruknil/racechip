@@ -87,8 +87,8 @@ func NewRedisBackend(cfg app.Config, log logger.AppLog) redissvc.IRedisBackendSe
 	return redissvc.New(cfg.Backend.Redis, log)
 }
 
-func NewHttpBackend(cfg app.Config, s httpbackend.IHttpBackendService, r redissvc.IRedisBackendService) httpsvc.IHttpBackend {
-	return httpsvc.New(cfg.Backend.Http, s, r)
+func NewHttpBackend(cfg app.Config, s httpbackend.IHttpBackendService) httpsvc.IHttpBackend {
+	return httpsvc.New(cfg.Backend.Http, s)
 }
 
 //================= End BACKEND Section =================
@@ -102,7 +102,7 @@ func NewRouter(httpService service.IHttpService, conf app.Config, log logger.App
 
 // service
 // Http service
-func NewHttpService(httpService httpsvc.IHttpBackend, cfg app.Config, log logger.AppLog) service.IHttpService {
+func NewHttpService(httpService httpsvc.IHttpBackend, redis redissvc.IRedisBackendService, cfg app.Config, log logger.AppLog) service.IHttpService {
 	return service.HttpService{
 		//DecipherAesService: service.DecipherAesService{IHSMService: hsmService, AppLog: log},
 		//EncipherAesService: service.EncipherAesService{IHSMService: hsmService, AppLog: log},
@@ -114,7 +114,8 @@ func NewHttpService(httpService httpsvc.IHttpBackend, cfg app.Config, log logger
 		//SFTP0003C01Service: service.SFTP0003C01Service{AppLog: log, CcmsFs: syn},
 		//SFTP0004O01Service: service.SFTP0004O01Service{AppLog: log, CcmsFs: syn},
 
-		ExampleService: service.ExampleService{IHttpBackend: httpService, AppLog: log},
+		ExampleHttpService:  service.ExampleHttpBackendService{IHttpBackend: httpService, AppLog: log},
+		ExampleRedisService: service.ExampleRedisBackendService{IRedisBackendService: redis, AppLog: log},
 	}
 }
 func NewConfig() app.Config {

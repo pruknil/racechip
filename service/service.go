@@ -180,13 +180,16 @@ func buildError(businessError error) Error {
 
 type HttpService struct {
 	baseService
-	ExampleService ExampleService
+	ExampleHttpService  ExampleHttpBackendService
+	ExampleRedisService ExampleRedisBackendService
 }
 
 func (s *HttpService) collectService(serviceId string) IServiceTemplate {
 	switch serviceId {
 	case "TESTJA":
-		return &s.ExampleService
+		return &s.ExampleHttpService
+	case "TestRedis":
+		return &s.ExampleRedisService
 		//case "DecipherAes":
 		//	return &s.DecipherAesService
 		//case "EncipherAes":

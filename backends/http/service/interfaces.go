@@ -1,6 +1,8 @@
 package service
 
-import "sportbit.com/racechip/backends/http"
+import (
+	"sportbit.com/racechip/backends/http"
+)
 
 //import "sportbit.com/racechip/backends/http"
 
