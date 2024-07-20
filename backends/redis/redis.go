@@ -65,9 +65,9 @@ func (s *Client) Set(key string, value interface{}, expiration time.Duration) er
 	return err
 }
 
-func (s *Client) Get(key string, value interface{}, expiration time.Duration) (string, error) {
+func (s *Client) Get(key string) (string, error) {
 	defer func(t time.Time) {
-		s.AppLog.Trace.Printf("%s", value)
+		s.AppLog.Trace.Printf("%s", key)
 		s.AppLog.Trace.Printf("Redis.Get elapsed time %.4f ms", float64(time.Since(t).Nanoseconds())/float64(time.Millisecond))
 
 	}(time.Now())

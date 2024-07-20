@@ -2,6 +2,7 @@ package service
 
 import (
 	"encoding/json"
+	"fmt"
 	"sportbit.com/racechip/backends/http"
 
 	"github.com/getlantern/deepcopy"
@@ -70,5 +71,11 @@ func (s *ExampleRedisBackendService) Business() error {
 	if err != nil {
 		return err
 	}
+
+	val, err := s.IRedisBackendService.Get("key")
+	if err != nil {
+		return err
+	}
+	fmt.Println(val)
 	return nil
 }
