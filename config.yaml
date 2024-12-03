@@ -8,3 +8,5 @@ server:
     read: 10s
     write: 10s
     idle: 10s
+redis:
+  server: localhost:6379

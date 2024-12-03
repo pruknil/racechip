@@ -104,16 +104,6 @@ func NewRouter(httpService service.IHttpService, conf app.Config, log logger.App
 // Http service
 func NewHttpService(httpService httpsvc.IHttpBackend, redis redissvc.IRedisBackendService, cfg app.Config, log logger.AppLog) service.IHttpService {
 	return service.HttpService{
-		//DecipherAesService: service.DecipherAesService{IHSMService: hsmService, AppLog: log},
-		//EncipherAesService: service.EncipherAesService{IHSMService: hsmService, AppLog: log},
-		//CCMSDecryptService: service.CCMSDecryptService{IHttpBackend: httpService, AppLog: log},
-		//CCMSEncryptService: service.CCMSEncryptService{IHttpBackend: httpService, AppLog: log},
-		//DemoService:        service.DemoService{AppLog: log, CcmsFs: syn},
-		//SFTP0001O01Service: service.SFTP0001O01Service{AppLog: log, CcmsFs: syn},
-		//SFTP0002I01Service: service.SFTP0002I01Service{AppLog: log, CcmsFs: syn},
-		//SFTP0003C01Service: service.SFTP0003C01Service{AppLog: log, CcmsFs: syn},
-		//SFTP0004O01Service: service.SFTP0004O01Service{AppLog: log, CcmsFs: syn},
-
 		ExampleHttpService:  service.ExampleHttpBackendService{IHttpBackend: httpService, AppLog: log},
 		ExampleRedisService: service.ExampleRedisBackendService{IRedisBackendService: redis, AppLog: log},
 	}
@@ -132,7 +122,7 @@ func NewConfig() app.Config {
 	return app.Config{
 		Backend: app.Backend{
 			Http: httpbackend.Config{
-
+				BackendAPI: httpbackend.BackendAPI{ExampleUrl: "https://jsonplaceholder.typicode.com/posts"},
 				//CCMSAPI: httpbackend.CCMSAPI{
 				//	DecryptDataUrl: os.Getenv("CCMS_DECRYPT"),
 				//	EncryptDataUrl: os.Getenv("CCMS_ENCRYPT"),
@@ -141,7 +131,7 @@ func NewConfig() app.Config {
 			},
 			Redis: redissvc.Config{
 				RedisCfg: redissvc.RedisConfig{
-					Addr:     "localhost:6379",
+					Addr:     viper.GetString("redis.server"),
 					Password: "",
 					DB:       0,
 				}},

@@ -31,14 +31,12 @@ func New(c Config, log logger.AppLog) IHttpBackendService {
 	return &Client{CircuitBreaker: cb, Config: c, AppLog: log}
 }
 
-type CCMSAPI struct {
-	DecryptDataUrl string
-	EncryptDataUrl string
-	LocalUrl       string
+type BackendAPI struct {
+	ExampleUrl string
 }
 
 type Config struct {
-	CCMSAPI CCMSAPI
+	BackendAPI BackendAPI
 }
 
 func (s *Client) DoRequest(input RestRequestBuilder) error {

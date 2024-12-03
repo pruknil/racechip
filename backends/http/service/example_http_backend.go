@@ -7,9 +7,7 @@ import (
 
 func (s *HttpBackendService) TESTJA(req http2.ExampleBackendRequest) (*http2.ExampleBackendResponse, error) {
 	var model http2.ExampleBackendResponse
-	//var builder, err = s.newPostRequestBuilder(s.CCMSAPI.LocalUrl, req)
-
-	var builder, err = s.newGetRequestBuilder("https://jsonplaceholder.typicode.com/posts", nil, req)
+	var builder, err = s.newGetRequestBuilder(s.Config.BackendAPI.ExampleUrl, nil, req)
 
 	if err != nil {
 		return nil, err
